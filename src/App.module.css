@@ -1,5 +1,50 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  --main-content-padding: 10px;
+}
+
 .main {
-  height: 500px;
-  width: 500px;
-  background-color: aqua;
+  height: 100%;
+  background-color: #3c3f52;
+  color: #f8f8f2;
+}
+
+.headerOptions {
+  padding: var(--main-content-padding);
+  display: flex;
+  justify-content: space-between;
+}
+
+#selectOptions {
+  color: #ffffff;
+  background-color: #2f3240;
+  border-radius: 8px;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+#option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#runCode {
+  height: 30px;
+  width: 100px;
+  color: #ffffff;
+  background-color: #2f3240;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+#runCode:active {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
