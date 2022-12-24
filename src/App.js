@@ -22,7 +22,7 @@ export default function App() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code, language: currentLanguage }),
     };
     let response = await fetch('http://localhost:3500/api/run-code', config);
     response = await response.text();
