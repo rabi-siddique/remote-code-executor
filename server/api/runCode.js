@@ -1,19 +1,24 @@
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const languages = {
+const extensions = {
   python: '.py',
   javascript: '.js',
 };
 
+const commands = {
+  python: 'python',
+  javascript: 'node',
+};
+
 module.exports = (req, res) => {
   const { code, language } = req.body;
-  const filename = __dirname + `\\Files\\main${languages[language]}`;
+  const filename = __dirname + `\\Files\\main${extensions[language]}`;
   fs.writeFile(filename, code, function (err) {
     console.error(err);
   });
 
-  exec(`python ${filename}`, (error, stdout, stderr) => {
+  exec(`${commands[language]} ${filename}`, (error, stdout, stderr) => {
     if (error) {
       let errorMessage = error.message;
       errorMessage = errorMessage.replace('Command failed:', 'Error:');
