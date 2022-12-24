@@ -7,10 +7,26 @@ import 'ace-builds/src-min-noconflict/theme-dracula';
 
 export default function App() {
   const [currentLanguage, setCurrentLanguage] = useState('python');
+  const [code, setCode] = useState(
+    currentLanguage == 'python' ? '# Write Code Here' : '// Write Code Here'
+  );
   const currentLanguageHandler = (e) => {
     setCurrentLanguage(e.target.value);
   };
-  const runCode = () => {};
+  const codeHandler = (newValue) => {
+    setCode(newValue);
+  };
+  const runCode = async () => {
+    const config = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+    };
+    let response = await fetch('http://localhost:3500/api/run-code', config);
+    response = await response.text();
+  };
   return (
     <div className={css.main}>
       <div className={css.headerOptions}>
@@ -30,12 +46,9 @@ export default function App() {
         </button>
       </div>
       <AceEditor
-        placeholder={
-          currentLanguage == 'python'
-            ? '# Write Code Here'
-            : '// Write Code Here'
-        }
+        placeholder={code}
         mode={currentLanguage}
+        onChange={codeHandler}
         theme='dracula'
         name='codeEditor'
         height='300px'
@@ -44,11 +57,7 @@ export default function App() {
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
-        value={
-          currentLanguage == 'python'
-            ? `def Solution:`
-            : `function Solution(){}`
-        }
+        value={code}
         setOptions={{
           enableBasicAutocompletion: false,
           enableLiveAutocompletion: false,
