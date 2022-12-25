@@ -53,7 +53,7 @@ export default function App() {
         onChange={codeHandler}
         theme='dracula'
         name='codeEditor'
-        height='300px'
+        height='70%'
         width='100%'
         fontSize={16}
         showPrintMargin={true}

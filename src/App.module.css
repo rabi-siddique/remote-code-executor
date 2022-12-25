@@ -11,7 +11,7 @@ html {
 .main {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   background-color: #3c3f52;
   color: #f8f8f2;
 }
@@ -53,8 +53,7 @@ html {
 }
 
 .terminalContainer {
-  flex-grow: 1;
-  height: 100%;
+  height: 30%;
   background: #2f3240;
   border: 40px solid #3c3f52;
   padding: 10px;
