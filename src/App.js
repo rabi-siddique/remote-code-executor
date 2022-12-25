@@ -10,6 +10,7 @@ export default function App() {
   const [code, setCode] = useState(
     currentLanguage == 'python' ? '# Write Code Here' : '// Write Code Here'
   );
+  const [terminalOutput, setTerminalOutput] = useState('');
   const currentLanguageHandler = (e) => {
     setCurrentLanguage(e.target.value);
   };
@@ -26,6 +27,7 @@ export default function App() {
     };
     let response = await fetch('http://localhost:3500/api/run-code', config);
     response = await response.text();
+    setTerminalOutput(response);
   };
   return (
     <div className={css.main}>
@@ -66,6 +68,9 @@ export default function App() {
           tabSize: 4,
         }}
       />
+      <div className={css.terminalContainer}>
+        <p>{terminalOutput ? terminalOutput : 'Code Executor'}</p>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
-* {
+body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 html {
@@ -8,6 +9,8 @@ html {
 }
 
 .main {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: #3c3f52;
   color: #f8f8f2;
@@ -47,4 +50,12 @@ html {
 #runCode:active {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.terminalContainer {
+  flex-grow: 1;
+  height: 100%;
+  background: #2f3240;
+  border: 40px solid #3c3f52;
+  padding: 10px;
 }
