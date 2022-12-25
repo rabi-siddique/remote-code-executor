@@ -55,6 +55,7 @@ html {
 .terminalContainer {
   height: 30%;
   background: #2f3240;
-  border: 40px solid #3c3f52;
+  border: 20px solid #3c3f52;
   padding: 10px;
+  overflow: auto;
 }

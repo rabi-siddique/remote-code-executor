@@ -18,6 +18,7 @@ export default function App() {
     setCode(newValue);
   };
   const runCode = async () => {
+    setTerminalOutput('Executing...');
     const config = {
       method: 'POST',
       headers: {
@@ -27,7 +28,8 @@ export default function App() {
     };
     let response = await fetch('http://localhost:3500/api/run-code', config);
     response = await response.text();
-    setTerminalOutput(response);
+    response = JSON.parse(response);
+    setTerminalOutput(response.output);
   };
   return (
     <div className={css.main}>
@@ -69,7 +71,7 @@ export default function App() {
         }}
       />
       <div className={css.terminalContainer}>
-        <p>{terminalOutput ? terminalOutput : 'Code Executor'}</p>
+        <p>{terminalOutput}</p>
       </div>
     </div>
   );
