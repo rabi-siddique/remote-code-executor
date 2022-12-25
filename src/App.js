@@ -29,7 +29,11 @@ export default function App() {
     let response = await fetch('http://localhost:3500/api/run-code', config);
     response = await response.text();
     response = JSON.parse(response);
-    setTerminalOutput(response.output);
+    if (response.output) {
+      setTerminalOutput(response.output);
+    } else {
+      setTerminalOutput(response.error);
+    }
   };
   return (
     <div className={css.main}>

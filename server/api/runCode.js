@@ -23,7 +23,6 @@ module.exports = (req, res) => {
       let errorMessage = error.message;
       errorMessage = errorMessage.replace('Command failed:', 'Error:');
       errorMessage = errorMessage.replace(__dirname + '\\Files\\', '');
-      console.log(errorMessage);
       return res.send({
         error: errorMessage,
       });
