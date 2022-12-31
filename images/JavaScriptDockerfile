@@ -1,0 +1,5 @@
+FROM node:14-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y 
+COPY main.js /app/main.js
+ENTRYPOINT ["node", "/app/python/node.js"]
