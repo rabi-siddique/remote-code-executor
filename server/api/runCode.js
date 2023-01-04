@@ -25,7 +25,7 @@ module.exports = (req, res) => {
   });
 
   let dockerCommands = `
-  docker run -it ${containerNames[language]} /bin/bash &&
+  docker run -it ${containerNames[language]} &&
   docker cp ${filename} ${containerNames[language]}:/app &&
   docker exec ${containerNames[language]} bash -c "${commands[language]} main${extensions[language]}"
   `;
