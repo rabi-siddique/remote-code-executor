@@ -7,18 +7,30 @@ const extensions = {
 };
 
 const commands = {
-  python: 'python',
+  python: 'python3',
   javascript: 'node',
+};
+
+const containerNames = {
+  python: 'python:v1',
+  javascript: 'js:v1',
 };
 
 module.exports = (req, res) => {
   const { code, language } = req.body;
+
   const filename = __dirname + `\\Files\\main${extensions[language]}`;
   fs.writeFile(filename, code, function (err) {
     console.error(err);
   });
 
-  exec(`${commands[language]} ${filename}`, (error, stdout, stderr) => {
+  let dockerCommands = `
+  docker run -it ${containerNames[language]} /bin/bash &&
+  docker cp ${filename} ${containerNames[language]}:/app &&
+  docker exec ${containerNames[language]} bash -c "${commands[language]} main${extensions[language]}"
+  `;
+
+  exec(dockerCommands, (error, stdout, stderr) => {
     if (error) {
       let errorMessage = error.message;
       errorMessage = errorMessage.replace('Command failed:', 'Error:');
