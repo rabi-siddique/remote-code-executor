@@ -19,7 +19,7 @@ const containerNames = {
 module.exports = (req, res) => {
   const { code, language } = req.body;
 
-  const filename = __dirname + `\\Files\\main${extensions[language]}`;
+  const filename = `${__dirname}/Files/main${extensions[language]}`;
   fs.writeFile(filename, code, function (err) {
     console.error(err);
   });
@@ -34,7 +34,7 @@ module.exports = (req, res) => {
     if (error) {
       let errorMessage = error.message;
       errorMessage = errorMessage.replace('Command failed:', 'Error:');
-      errorMessage = errorMessage.replace(__dirname + '\\Files\\', '');
+      errorMessage = errorMessage.replace(`${__dirname}/Files/`, '');
       return res.send({
         error: errorMessage,
       });
