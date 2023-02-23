@@ -1,6 +1,8 @@
 const fs = require('fs');
+const { promisify } = require('util');
 const { exec } = require('child_process');
 const path = require('path');
+const execPromise = promisify(exec);
 
 const extensions = {
   python: '.py',
@@ -17,47 +19,44 @@ const containerNames = {
   javascript: 'js:v1',
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const { code, language } = req.body;
 
   const filename = path.join(__dirname, 'Files', `main${extensions[language]}`);
-  fs.writeFile(filename, code, function (err) {
-    if (err) {
-      console.error(err);
-      return res.send({
-        error: 'Error writing file',
-      });
-    }
-  });
+  try {
+    await fs.promises.writeFile(filename, code);
+  } catch (err) {
+    console.error(err);
+    return res.send({
+      error: 'Error writing file',
+    });
+  }
 
-  exec(`docker run -d ${containerNames[language]}`, (error, stdout, stderr) => {
-    let containerID = stdout;
-    exec(
-      `docker cp ${filename} ${containerID.trim()}:/app`,
-      (error, stdout, stderr) => {
-        exec(
-          `docker exec -t ${containerID.trim()} bash -c "${
-            commands[language]
-          } main${extensions[language]}"`,
-          (error, stdout, stderr) => {
-            console.log({ error, stdout, stderr });
-            if (error) {
-              let errorMessage = error.message;
-              errorMessage = errorMessage.replace('Command failed:', 'Error:');
-              errorMessage = errorMessage.replace(`${__dirname}/Files/`, '');
-              return res.send({
-                error: errorMessage,
-              });
-            }
-
-            if (stderr) {
-              return res.send({ error: stderr });
-            }
-
-            return res.send({ output: stdout });
-          }
-        );
-      }
+  try {
+    const { stdout: containerID } = await execPromise(
+      `docker run -d ${containerNames[language]}`
     );
-  });
+    await execPromise(`docker cp ${filename} ${containerID.trim()}:/app`);
+    const { stdout, stderr } = await execPromise(
+      `docker exec -t ${containerID.trim()} bash -c "${
+        commands[language]
+      } main${extensions[language]}"`
+    );
+
+    console.log({ stdout, stderr });
+
+    if (stderr) {
+      return res.send({ error: stderr });
+    }
+
+    return res.send({ output: stdout });
+  } catch (error) {
+    console.error(error);
+    let errorMessage = error.message;
+    errorMessage = errorMessage.replace('Command failed:', 'Error:');
+    errorMessage = errorMessage.replace(`${__dirname}/Files/`, '');
+    return res.send({
+      error: errorMessage,
+    });
+  }
 };
