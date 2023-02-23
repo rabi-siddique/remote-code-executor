@@ -29,28 +29,35 @@ module.exports = (req, res) => {
       });
     }
   });
-  console.log('FILENAME', filename);
-  let dockerCommands = `
-    docker run -it ${containerNames[language]} &&
-    docker cp ${filename} ${containerNames[language]}:/app &&
-    docker exec -t ${containerNames[language]} bash -c "${commands[language]} main${extensions[language]}"
-  `;
 
-  exec(dockerCommands, (error, stdout, stderr) => {
-    console.log({ error, stdout, stderr });
-    if (error) {
-      let errorMessage = error.message;
-      errorMessage = errorMessage.replace('Command failed:', 'Error:');
-      errorMessage = errorMessage.replace(`${__dirname}/Files/`, '');
-      return res.send({
-        error: errorMessage,
-      });
-    }
+  exec(`docker run -d ${containerNames[language]}`, (error, stdout, stderr) => {
+    let containerID = stdout;
+    exec(
+      `docker cp ${filename} ${containerID.trim()}:/app`,
+      (error, stdout, stderr) => {
+        exec(
+          `docker exec -t ${containerID.trim()} bash -c "${
+            commands[language]
+          } main${extensions[language]}"`,
+          (error, stdout, stderr) => {
+            console.log({ error, stdout, stderr });
+            if (error) {
+              let errorMessage = error.message;
+              errorMessage = errorMessage.replace('Command failed:', 'Error:');
+              errorMessage = errorMessage.replace(`${__dirname}/Files/`, '');
+              return res.send({
+                error: errorMessage,
+              });
+            }
 
-    if (stderr) {
-      return res.send({ error: stderr });
-    }
+            if (stderr) {
+              return res.send({ error: stderr });
+            }
 
-    return res.send({ output: stdout });
+            return res.send({ output: stdout });
+          }
+        );
+      }
+    );
   });
 };
