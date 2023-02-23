@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { exec } = require('child_process');
+const path = require('path');
 
 const extensions = {
   python: '.py',
@@ -19,18 +20,24 @@ const containerNames = {
 module.exports = (req, res) => {
   const { code, language } = req.body;
 
-  const filename = `${__dirname}/Files/main${extensions[language]}`;
+  const filename = path.join(__dirname, 'Files', `main${extensions[language]}`);
   fs.writeFile(filename, code, function (err) {
-    console.error(err);
+    if (err) {
+      console.error(err);
+      return res.send({
+        error: 'Error writing file',
+      });
+    }
   });
-
+  console.log('FILENAME', filename);
   let dockerCommands = `
-  docker run -it ${containerNames[language]} &&
-  docker cp ${filename} ${containerNames[language]}:/app &&
-  docker exec ${containerNames[language]} bash -c "${commands[language]} main${extensions[language]}"
+    docker run -it ${containerNames[language]} &&
+    docker cp ${filename} ${containerNames[language]}:/app &&
+    docker exec -t ${containerNames[language]} bash -c "${commands[language]} main${extensions[language]}"
   `;
 
   exec(dockerCommands, (error, stdout, stderr) => {
+    console.log({ error, stdout, stderr });
     if (error) {
       let errorMessage = error.message;
       errorMessage = errorMessage.replace('Command failed:', 'Error:');
