@@ -32,10 +32,11 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { stdout: containerID } = await execPromise(
-      `docker run -d -it ${containerNames[language]}`
+    console.log(`docker run -d -it ${containerNames[language]}`);
+    const { stdout: id } = await execPromise(
+      `docker run -d -it ${containerNames[language]} /bin/bash`
     );
-
+    let containerID = id.substring(0, 12);
     await execPromise(`docker cp ${filename} ${containerID.trim()}:/app`);
     const { stdout, stderr } = await execPromise(
       `docker exec -t ${containerID.trim()} bash -c "${
