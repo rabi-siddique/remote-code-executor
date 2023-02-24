@@ -21,7 +21,6 @@ const containerNames = {
 
 module.exports = async (req, res) => {
   const { code, language } = req.body;
-
   const filename = path.join(__dirname, 'Files', `main${extensions[language]}`);
   try {
     await fs.promises.writeFile(filename, code);
@@ -34,16 +33,15 @@ module.exports = async (req, res) => {
 
   try {
     const { stdout: containerID } = await execPromise(
-      `docker run -d ${containerNames[language]}`
+      `docker run -d -it ${containerNames[language]}`
     );
+
     await execPromise(`docker cp ${filename} ${containerID.trim()}:/app`);
     const { stdout, stderr } = await execPromise(
       `docker exec -t ${containerID.trim()} bash -c "${
         commands[language]
       } main${extensions[language]}"`
     );
-
-    console.log({ stdout, stderr });
 
     if (stderr) {
       return res.send({ error: stderr });
