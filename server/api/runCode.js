@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     console.error(error);
     let errorMessage = error.message;
     errorMessage = errorMessage.replace('Command failed:', 'Error:');
-    errorMessage = errorMessage.replace(`${__dirname}/Files/`, '');
+    errorMessage = errorMessage.replace(`${__dirname}/files/`, '');
     return res.send({
       error: errorMessage,
     });
