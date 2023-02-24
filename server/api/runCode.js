@@ -7,7 +7,7 @@ const execPromise = promisify(exec);
 
 module.exports = async (req, res) => {
   const { code, language } = req.body;
-  const filename = path.join(__dirname, 'Files', `main${extensions[language]}`);
+  const filename = path.join(__dirname, 'files', `main${extensions[language]}`);
   try {
     await fs.promises.writeFile(filename, code);
   } catch (err) {
