@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-frontend": "webpack-dev-server --mode development --open --hot",
-    "start-backend": "nodemon server/index.js",
-    "dev-server": "start yarn start-backend && start yarn start-frontend",
+    "frontend": "webpack-dev-server --mode development --open --hot",
+    "backend": "nodemon server/index.js",
+    "dev-server": "yarn backend && yarn frontend",
     "build": "webpack --mode production",
     "test": "npm test"
   },
