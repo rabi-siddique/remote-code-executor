@@ -1,23 +1,9 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const { exec } = require('child_process');
+const { extensions, commands, containerNames } = require('../languages');
 const path = require('path');
 const execPromise = promisify(exec);
-
-const extensions = {
-  python: '.py',
-  javascript: '.js',
-};
-
-const commands = {
-  python: 'python3',
-  javascript: 'node',
-};
-
-const containerNames = {
-  python: 'python:v1',
-  javascript: 'js:v1',
-};
 
 module.exports = async (req, res) => {
   const { code, language } = req.body;
@@ -32,7 +18,6 @@ module.exports = async (req, res) => {
   }
 
   try {
-    console.log(`docker run -d -it ${containerNames[language]}`);
     const { stdout: id } = await execPromise(
       `docker run -d -it ${containerNames[language]} /bin/bash`
     );
