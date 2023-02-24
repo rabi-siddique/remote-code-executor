@@ -23,9 +23,14 @@ module.exports = async (req, res) => {
     );
 
     let containerID = id.substring(0, 12);
+
     const { stdout, stderr } = await execPromise(
-      `docker cp ${filename} ${containerID}:/app && docker exec -t ${containerID} bash -c "${commands[language]} main${extensions[language]}"`
+      `docker cp ${filename} ${containerID}:/app && docker exec -t ${containerID} bash -c "${commands[language]} main${extensions[language]}"`,
+      { timeout: 20000, maxBuffer: 50000 }
     );
+
+    await exec(`rm ${filename}`);
+    await exec(`docker kill ${containerID}`);
 
     if (stderr) {
       return res.send({ error: stderr });
