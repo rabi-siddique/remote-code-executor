@@ -45,9 +45,6 @@ export default function App() {
           <option id={css.option} value='python'>
             Python
           </option>
-          <option id={css.option} value='javascript'>
-            Javascript
-          </option>
           <option id={css.option} value='golang'>
             Go
           </option>
