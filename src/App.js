@@ -46,7 +46,11 @@ const CodeEditor = () => {
       },
       body: JSON.stringify({ code, language: currentLanguage }),
     };
-    let response = await fetch('http://localhost:3500/api/run-code', config);
+
+    let response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/run-code`,
+      config
+    );
     response = await response.text();
     response = JSON.parse(response);
     if (response.output) {
