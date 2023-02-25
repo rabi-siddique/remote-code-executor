@@ -1,6 +1,6 @@
 ## Overview
 
-This remote code executeer is a web application that allows users to write and execute Python and Go code in a web-based environment. The project is built using Node.js and Express for the backend, and React for the frontend. When a user submits code through the editor, the backend creates a Docker container on-the-fly to execute the code. Once the code has finished executing, the output is sent back to the user.
+This remote code executor is a web application that allows users to write and execute Python and Go code in a web-based environment. The project is built using Node.js and Express for the backend, and React for the frontend. When a user submits code through the editor, the backend creates a Docker container on-the-fly to execute the code. Once the code has finished executing, the output is sent back to the user.
 
 ## Installation
 
