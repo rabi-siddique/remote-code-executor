@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
-import css from './App.module.css';
+import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-min-noconflict/theme-dracula';
+import 'ace-builds/src-noconflict/mode-golang';
+import 'ace-builds/src-noconflict/theme-dracula';
+import css from './App.module.css';
 
-export default function App() {
-  const [currentLanguage, setCurrentLanguage] = useState(
-    localStorage.getItem('currentLanguage') || 'python'
-  );
+const CodeEditor = () => {
+  const [currentLanguage, setCurrentLanguage] = useState('python');
   const [code, setCode] = useState(
     currentLanguage === 'python' ? '# Write Code Here' : '// Write Code Here'
   );
   const [terminalOutput, setTerminalOutput] = useState('');
 
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language');
+    if (storedLanguage) {
+      setCurrentLanguage(storedLanguage);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('language', currentLanguage);
+  }, [currentLanguage]);
+
   const currentLanguageHandler = (e) => {
-    const newLanguage = e.target.value;
-    localStorage.setItem('currentLanguage', newLanguage);
-    setCurrentLanguage(newLanguage);
+    setCurrentLanguage(e.target.value);
   };
 
   const codeHandler = (newValue) => {
@@ -43,6 +50,8 @@ export default function App() {
     }
   };
 
+  const editorMode = currentLanguage;
+
   return (
     <div className={css.main}>
       <div className={css.headerOptions}>
@@ -63,7 +72,7 @@ export default function App() {
       </div>
       <AceEditor
         placeholder={code}
-        mode={currentLanguage}
+        mode={editorMode}
         onChange={codeHandler}
         theme='dracula'
         name='codeEditor'
@@ -87,4 +96,6 @@ export default function App() {
       </div>
     </div>
   );
-}
+};
+
+export default CodeEditor;
