@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Roboto Mono', monospace;
 }
 
 html {
@@ -13,23 +13,26 @@ html {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #3c3f52;
-  color: #f8f8f2;
+  background-color: #f8f8f8;
+  color: #333333;
 }
 
 .headerOptions {
   padding: var(--main-content-padding);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  background-color: #3c3f52;
 }
 
 #selectOptions {
   color: #ffffff;
   background-color: #2f3240;
   border-radius: 8px;
-  padding: 5px;
+  padding: 8px 12px;
   border: none;
   cursor: pointer;
+  font-size: 16px;
 }
 
 #option {
@@ -38,19 +41,47 @@ html {
 }
 
 #runCode {
-  height: 30px;
+  height: 40px;
   width: 100px;
   color: #ffffff;
   background-color: #2f3240;
   border-radius: 8px;
   border: none;
   cursor: pointer;
+  font-size: 16px;
   transition: all 0.3s ease-in-out;
 }
 
 #runCode:active {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.ace_editor {
+  height: 70%;
+  width: 100%;
+  font-size: 16px;
+}
+
+.ace_gutter {
+  background-color: #f8f8f8;
+}
+
+.ace_gutter-cell {
+  color: #333333;
+}
+
+.ace_print-margin {
+  width: 1px;
+  background-color: #f8f8f8;
+}
+
+.ace_active-line {
+  background-color: #e5e5e5;
+}
+
+.ace_marker-layer .ace_selection {
+  background-color: #c2d7eb;
 }
 
 .terminalContainer {
