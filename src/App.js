@@ -5,26 +5,32 @@ import 'ace-builds/src-noconflict/mode-golang';
 import 'ace-builds/src-noconflict/theme-dracula';
 import css from './App.module.css';
 
+const languageComments = {
+  python: '# Write Code Here',
+  golang: '// Write Code Here',
+};
+
 const CodeEditor = () => {
   const [currentLanguage, setCurrentLanguage] = useState('python');
-  const [code, setCode] = useState(
-    currentLanguage === 'python' ? '# Write Code Here' : '// Write Code Here'
-  );
+  const [code, setCode] = useState(languageComments[currentLanguage]);
   const [terminalOutput, setTerminalOutput] = useState('');
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem('language');
     if (storedLanguage) {
       setCurrentLanguage(storedLanguage);
+      setCode(languageComments[currentLanguage]);
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('language', currentLanguage);
+    setCode(languageComments[currentLanguage]);
   }, [currentLanguage]);
 
   const currentLanguageHandler = (e) => {
     setCurrentLanguage(e.target.value);
+    localStorage.setItem('language', e.target.value);
+    setCode(languageComments[currentLanguage]);
   };
 
   const codeHandler = (newValue) => {
