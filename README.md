@@ -11,7 +11,7 @@ After cloning the repository, install dependencies:
 npm install
 ```
 
-After this you will need to build the Docker images for Python and Go execution. So navigate `docker-files` folder.
+After this you will need to build the Docker images for Python and Go execution. So navigate to `docker-files` folder.
 
 ```
 cd docker-files
