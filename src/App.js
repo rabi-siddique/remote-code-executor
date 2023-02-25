@@ -78,7 +78,7 @@ export default function App() {
         }}
       />
       <div className={css.terminalContainer}>
-        <p>{terminalOutput}</p>
+        <pre>{terminalOutput}</pre>
       </div>
     </div>
   );
