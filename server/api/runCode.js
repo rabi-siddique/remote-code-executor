@@ -8,25 +8,21 @@ const execPromise = promisify(exec);
 module.exports = async (req, res) => {
   const { code, language } = req.body;
 
-  const filename = path.join(__dirname, 'files', `main${extensions[language]}`);
-
-  try {
-    await fs.promises.writeFile(filename, code);
-  } catch (err) {
-    return res.send({
-      error: 'Something went wrong. Please try again later.',
-    });
-  }
-
   try {
     const { stdout: id } = await execPromise(
       `docker run -d -it ${containerNames[language]} /bin/bash`
     );
+    const filename = path.join(
+      __dirname,
+      'files',
+      `${id.substring(0, 12)}${extensions[language]}`
+    );
+    await fs.promises.writeFile(filename, code);
 
     let containerID = id.substring(0, 12);
 
     const { stdout, stderr } = await execPromise(
-      `docker cp ${filename} ${containerID}:/app && docker exec -t ${containerID} bash -c "${commands[language]} main${extensions[language]}"`,
+      `docker cp ${filename} ${containerID}:/app && docker exec -t ${containerID} bash -c "${commands[language]} ${containerID}${extensions[language]}"`,
       { timeout: 20000, maxBuffer: 50000 }
     );
 
