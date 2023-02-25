@@ -9,7 +9,6 @@ After cloning the repository, install dependencies:
 
 ```
 npm install
-
 ```
 
 After this you will need to build the Docker images for Python and Go execution. So navigate `docker-files` folder.
@@ -23,7 +22,6 @@ Build the Docker images using the following commands:
 ```
 docker build -t python-v1 -f PythonDockerfile .
 docker build -t go-v1 -f GoDockerfile .
-
 ```
 
 This will build two Docker images: one for Python code execution and another for Go code execution.
@@ -34,7 +32,6 @@ Once the images have been built, you can start the server using :
 
 ```
 npm start
-
 ```
 
 Open a web browser and go to http://localhost:3000
