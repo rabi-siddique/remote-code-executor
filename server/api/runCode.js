@@ -32,18 +32,16 @@ module.exports = async (req, res) => {
     await exec(`rm ${filename}`);
     await exec(`docker kill ${containerID}`);
 
-    if (stderr) {
-      return res.send({ error: stderr });
+    if (stdout) {
+      return res.send({ output: stdout });
+    } else {
+      return res.send({
+        error: 'Something Went Wrong. Please try again later.',
+      });
     }
-
-    return res.send({ output: stdout });
   } catch (error) {
-    console.error(error);
-    let errorMessage = error.message;
-    errorMessage = errorMessage.replace('Command failed:', 'Error:');
-    errorMessage = errorMessage.replace(`${__dirname}/files/`, '');
     return res.send({
-      error: errorMessage,
+      error: 'Something Went Wrong. Please try again later.',
     });
   }
 };
