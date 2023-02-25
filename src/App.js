@@ -4,37 +4,43 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/mode-golang';
 import 'ace-builds/src-noconflict/theme-dracula';
 import css from './App.module.css';
+import debounceFunction from './helpers/debounceFunction';
 
-const languageComments = {
+const languageTemplates = {
   python: '# Write Code Here',
   golang: '// Write Code Here',
 };
 
 const CodeEditor = () => {
   const [currentLanguage, setCurrentLanguage] = useState('python');
-  const [code, setCode] = useState(languageComments[currentLanguage]);
+  const [code, setCode] = useState(languageTemplates[currentLanguage]);
   const [terminalOutput, setTerminalOutput] = useState('');
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem('language');
     if (storedLanguage) {
       setCurrentLanguage(storedLanguage);
-      setCode(languageComments[currentLanguage]);
+      setCode(languageTemplates[currentLanguage]);
     }
   }, []);
 
   useEffect(() => {
-    setCode(languageComments[currentLanguage]);
+    setCode(languageTemplates[currentLanguage]);
   }, [currentLanguage]);
 
   const currentLanguageHandler = (e) => {
     setCurrentLanguage(e.target.value);
     localStorage.setItem('language', e.target.value);
-    setCode(languageComments[currentLanguage]);
+    setCode(languageTemplates[currentLanguage]);
   };
+
+  const saveCode = debounceFunction(() => {
+    localStorage[currentLanguage] = code;
+  }, 1000);
 
   const codeHandler = (newValue) => {
     setCode(newValue);
+    saveCode(code);
   };
 
   const runCode = async () => {
