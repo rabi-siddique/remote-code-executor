@@ -36,7 +36,6 @@ module.exports = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log('ERROR', error);
     if (error.stdout) {
       return res.send({
         error: error.stdout,
