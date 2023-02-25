@@ -7,13 +7,14 @@ const execPromise = promisify(exec);
 
 module.exports = async (req, res) => {
   const { code, language } = req.body;
+
   const filename = path.join(__dirname, 'files', `main${extensions[language]}`);
+
   try {
     await fs.promises.writeFile(filename, code);
   } catch (err) {
-    console.error(err);
     return res.send({
-      error: 'Error writing file',
+      error: 'Something went wrong. Please try again later.',
     });
   }
 
@@ -29,7 +30,6 @@ module.exports = async (req, res) => {
       { timeout: 20000, maxBuffer: 50000 }
     );
 
-    await exec(`rm ${filename}`);
     await exec(`docker kill ${containerID}`);
 
     if (stdout) {
@@ -40,8 +40,14 @@ module.exports = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.send({
-      error: 'Something Went Wrong. Please try again later.',
-    });
+    if (error.stdout) {
+      return res.send({
+        error: error.stdout,
+      });
+    } else {
+      return res.send({
+        error: 'Something Went Wrong. Please try again later.',
+      });
+    }
   }
 };
