@@ -4,6 +4,9 @@ const { exec } = require('child_process');
 const { extensions, commands, containerNames } = require('../languages');
 const path = require('path');
 const execPromise = promisify(exec);
+const NodeCache = require('node-cache');
+
+const cache = new NodeCache({ stdTTL: 60, checkperiod: 120 });
 
 async function cleanup(containerID, filename) {
   await execPromise(`docker kill ${containerID}`);
@@ -12,10 +15,18 @@ async function cleanup(containerID, filename) {
 
 module.exports = async (req, res) => {
   const { code, language } = req.body;
+
   let containerID;
   let filename;
 
   try {
+    // Check if output is already cached
+    const cacheKey = `${code}_${language}`;
+    const cachedOutput = cache.get(cacheKey);
+    if (cachedOutput) {
+      return res.send({ output: cachedOutput });
+    }
+
     const { stdout: id } = await execPromise(
       `docker run -d -it ${containerNames[language]} /bin/bash`
     );
@@ -32,6 +43,8 @@ module.exports = async (req, res) => {
     await cleanup(containerID, filename);
 
     if (stdout) {
+      // Cache the output
+      cache.set(cacheKey, stdout);
       return res.send({ output: stdout });
     } else {
       return res.send({
