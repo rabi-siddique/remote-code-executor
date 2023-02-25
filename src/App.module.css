@@ -55,8 +55,16 @@ html {
 
 .terminalContainer {
   height: 30%;
-  background: #2f3240;
-  border: 20px solid #3c3f52;
+  background: #282c34;
+  border: 1px solid #ddd;
   padding: 10px;
   overflow: auto;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+.terminalContainer pre {
+  margin: 0;
+  color: #ccc;
+  white-space: pre-wrap;
 }
