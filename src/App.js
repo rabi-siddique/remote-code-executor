@@ -48,6 +48,9 @@ export default function App() {
           <option id={css.option} value='javascript'>
             Javascript
           </option>
+          <option id={css.option} value='golang'>
+            Go
+          </option>
         </select>
         <button id={css.runCode} onClick={runCode}>
           Run
