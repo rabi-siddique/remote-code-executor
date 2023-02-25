@@ -6,17 +6,24 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-min-noconflict/theme-dracula';
 
 export default function App() {
-  const [currentLanguage, setCurrentLanguage] = useState('python');
+  const [currentLanguage, setCurrentLanguage] = useState(
+    localStorage.getItem('currentLanguage') || 'python'
+  );
   const [code, setCode] = useState(
-    currentLanguage == 'python' ? '# Write Code Here' : '// Write Code Here'
+    currentLanguage === 'python' ? '# Write Code Here' : '// Write Code Here'
   );
   const [terminalOutput, setTerminalOutput] = useState('');
+
   const currentLanguageHandler = (e) => {
-    setCurrentLanguage(e.target.value);
+    const newLanguage = e.target.value;
+    localStorage.setItem('currentLanguage', newLanguage);
+    setCurrentLanguage(newLanguage);
   };
+
   const codeHandler = (newValue) => {
     setCode(newValue);
   };
+
   const runCode = async () => {
     setTerminalOutput('Executing...');
     const config = {
@@ -35,6 +42,7 @@ export default function App() {
       setTerminalOutput(response.error);
     }
   };
+
   return (
     <div className={css.main}>
       <div className={css.headerOptions}>
