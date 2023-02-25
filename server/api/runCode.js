@@ -14,7 +14,6 @@ module.exports = async (req, res) => {
     );
     const filename = path.join(
       __dirname,
-      'files',
       `${id.substring(0, 12)}${extensions[language]}`
     );
     await fs.promises.writeFile(filename, code);
@@ -27,6 +26,7 @@ module.exports = async (req, res) => {
     );
 
     await exec(`docker kill ${containerID}`);
+    await fs.promises.unlink(filename);
 
     if (stdout) {
       return res.send({ output: stdout });
@@ -36,6 +36,7 @@ module.exports = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log('ERROR', error);
     if (error.stdout) {
       return res.send({
         error: error.stdout,
