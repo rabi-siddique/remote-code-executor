@@ -20,12 +20,12 @@ const CodeEditor = () => {
     const storedLanguage = localStorage.getItem('language');
     if (storedLanguage) {
       setCurrentLanguage(storedLanguage);
-      setCode(languageTemplates[currentLanguage]);
+      setSavedCode();
     }
   }, []);
 
   useEffect(() => {
-    setCode(languageTemplates[currentLanguage]);
+    setSavedCode();
   }, [currentLanguage]);
 
   const currentLanguageHandler = (e) => {
@@ -38,9 +38,18 @@ const CodeEditor = () => {
     localStorage[currentLanguage] = code;
   }, 1000);
 
+  const setSavedCode = () => {
+    let code = localStorage[currentLanguage];
+    if (code) {
+      setCode(localStorage[currentLanguage]);
+    } else {
+      setCode(languageTemplates[currentLanguage]);
+    }
+  };
+
   const codeHandler = (newValue) => {
     setCode(newValue);
-    saveCode(code);
+    saveCode();
   };
 
   const runCode = async () => {
