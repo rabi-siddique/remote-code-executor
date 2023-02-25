@@ -61,10 +61,12 @@ html {
   height: 70%;
   width: 100%;
   font-size: 16px;
+  border: none; /* Remove the default border */
 }
 
 .ace_gutter {
   background-color: #f8f8f8;
+  border-right: 1px solid #e8e8e8; /* Add a border to the right side */
 }
 
 .ace_gutter-cell {
@@ -92,10 +94,10 @@ html {
   overflow: auto;
   font-family: 'Roboto Mono', monospace;
   font-size: 14px;
+  color: #ccc;
 }
 
 .terminalContainer pre {
   margin: 0;
-  color: #ccc;
   white-space: pre-wrap;
 }
